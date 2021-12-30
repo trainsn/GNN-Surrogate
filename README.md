@@ -13,14 +13,23 @@ cd mpas_graph/build
 ./MPASGraph netcdf_filepath
 ```
 
-## Training Data Generation
+## Training Data Preparation
 
-Given a MPAS-Ocean netcdf file, extract the tempearture field and represent it with a 1D numpy array used for future training. 
+Given a MPAS-Ocean netcdf file, extract the tempearture field and represent it with a 1D array used for future training. 
 
 After compling, run 
 
 ```
 cd mpas_perm/build
-./MPASPerm /path/to/input_root /path/to/output_root netcdf_filename
+./MPASPerm /path/to/input_root/ /path/to/output_root/ netcdf_filename
+```
+
+## Cutting Policy Generation
+
+After a few simulations are run，generate the graph hierarchy cutting policy. (Figure 2(b))
+
+```
+cd mpas_ght/build
+./MPASGHT /path/to/graph_root/ threshold /path/to/input_netcdf_root/ /path/to/ght_root/ numFiles binary_filenames
 ```
 
