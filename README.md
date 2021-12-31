@@ -76,3 +76,9 @@ After compling MPASPermBack, run
 cd mpas_permBack/build
 ./MPASPermBack /path/to/input_root/ /path/to/output_root/ netcdf_filename
 ```
+
+Having the new MPAS netcdf file, consider using the following repo for visualizatoin: 
+MPASMap[https://github.com/trainsn/MPASMap] for horizontal cross-sections, 
+MPASCross[https://github.com/trainsn/MPASCross] for vertical cross-sections, 
+MPASDepth[https://github.com/trainsn/MPASDepth] for Isothermal Layer (ITL) Depth. 
+
