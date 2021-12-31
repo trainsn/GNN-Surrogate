@@ -5,6 +5,7 @@ The source code for the PacificVis 2022 submission "GNN-Surrogate: A Hierarchica
 ## Graph Hierarchy Generation
 
 Given the MPAS-Ocean mesh structure (a netcdf file), a corresponding graph hierarchy is generated (Figure 2(a)). 
+
 After compling MPASGraph, run 
 
 ```
@@ -31,6 +32,7 @@ python raw2res.py --root dataset --reference refence_ensemble_member
 ## Cutting Policy Generation
 
 After a few simulations are run，generate the graph hierarchy cutting policy (Figure 2(b). 
+
 After compling MPASGHT, run
 
 ```
@@ -68,8 +70,9 @@ python res2raw.py --root dataset --reference refence_ensemble_member --ght ght_d
 ```
 
 Finally, we load the predicted simulation output back to the MPAS netcdf file.
+
 After compling MPASPermBack, run
 ```
 cd mpas_permBack/build
-./MPASPermBack 
+./MPASPermBack /path/to/input_root/ /path/to/output_root/ netcdf_filename
 ```
