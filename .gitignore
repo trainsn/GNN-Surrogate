@@ -139,3 +139,5 @@ build
 cmake
 CMakeLists.txt
 res
+medoid.py
+eval

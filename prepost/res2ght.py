@@ -11,6 +11,8 @@ parser.add_argument("--root", type=str, default="/fs/project/PAS0027/mpas_graph"
 parser.add_argument("--ght", type=str, default="ght_0.5",
                     help="path of the graph hierarchy")
 
+args = parser.parse_args()
+
 path = os.path.join(args.root, args.ght, "graph")
 avgPoolAsgnIdx = torch.from_numpy(np.load(os.path.join(path, "ghtAvgPoolAsgnIdx0.npy"))).type(torch.LongTensor).to('cuda:0')
 avgPoolAsgnValue = torch.from_numpy(np.load(os.path.join(path, "ghtAvgPoolAsgnValue0.npy")).astype(np.float32)).to('cuda:0')
