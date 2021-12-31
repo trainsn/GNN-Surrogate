@@ -133,7 +133,7 @@ gnn_upsampler
 insitu_net
 mpas_crtedge
 mpas_tv*
-*.sh 
+*.sh
 *.o*
 build
 cmake
