@@ -1,4 +1,5 @@
 import os
+import argparse
 import numpy as np
 import scipy.sparse as sp
 import torch
@@ -15,9 +16,14 @@ def normalize(mx):
     mx = r_mat_inv.dot(mx)
     return mx
 
-root = "EC60to30_0.75"
+parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+parser.add_argument("--root", type=str, required=True,
+                    help="root of the graph hierarchy")
+
+args = parser.parse_args()
+
+root = args.root
 graphSizes = np.load(os.path.join(root, "ghtGraphSizes.npy"))
-path = "/fs/project/PAS0027/mpas_graph/ght_0.75/graph"
 
 for idx in range(0, graphSizes.shape[0] - 1):
     idxFile = "ghtAdjacencyIdx" + str(idx) + ".npy"
@@ -62,6 +68,6 @@ for idx in range(0, graphSizes.shape[0] - 1):
     edgeIdx, edgeInfo = coalesce(edgeIdx, edgeInfo, m=graphSizes[idx], n=graphSizes[idx])
     assert (adjIdx != edgeIdx).sum() == 0
 
-    np.save(os.path.join(path, idxFile), adjIdx.type(torch.int32))
-    np.save(os.path.join(path, valueFile), adjValue.type(torch.float16))
-    np.save(os.path.join(path, edgeFile), edgeInfo.type(torch.float16))
+    np.save(os.path.join(root, idxFile), adjIdx.type(torch.int32))
+    np.save(os.path.join(root, valueFile), adjValue.type(torch.float16))
+    np.save(os.path.join(root, edgeFile), edgeInfo.type(torch.float16))
