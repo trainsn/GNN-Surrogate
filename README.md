@@ -79,7 +79,7 @@ cd mpas_permBack/build
 ```
 
 Having the new MPAS netcdf file, consider using the following repo for visualizatoin: 
-[MPASMaph](https://github.com/trainsn/MPASMap) for horizontal cross-sections, 
+[MPASMap](https://github.com/trainsn/MPASMap) for horizontal cross-sections, 
 [MPASCross](https://github.com/trainsn/MPASCross) for vertical cross-sections, 
 and [MPASDepth](https://github.com/trainsn/MPASDepth) for Isothermal Layer (ITL) Depth. 
 
@@ -96,4 +96,4 @@ If you use this code for your research, please cite our paper.
 ```
 
 ## Acknowledgments
-Our code is inspired by [InSituNet](https://github.com/hewenbin/insitu_net)
+Our code is inspired by [InSituNet](https://github.com/hewenbin/insitu_net).
