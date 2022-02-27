@@ -1,8 +1,9 @@
 # GNN-Surrogate
-The source code for the PacificVis 2022 submission "GNN-Surrogate: A Hierarchical and Adaptive Graph Neural Network for Parameter Space Exploration of Unstructured-Mesh Ocean Simulations"
+The source code for our PacificVis 2022 paper "GNN-Surrogate: A Hierarchical and Adaptive Graph Neural Network for Parameter Space Exploration of Unstructured-Mesh Ocean Simulations".
 
+## Getting Started
 
-## Graph Hierarchy Generation
+### Graph Hierarchy Generation
 
 Given the MPAS-Ocean mesh structure (a netcdf file), a corresponding graph hierarchy is generated (Figure 2(a)). 
 
@@ -13,7 +14,7 @@ cd mpas_graph/build
 ./MPASGraph netcdf_filepath
 ```
 
-## Training Data Preperation 
+### Training Data Preperation 
 
 Given a MPAS-Ocean netcdf file, extract the tempearture field and represent it with a 1D array used for future training. 
 After compling MPASPerm, run 
@@ -29,7 +30,7 @@ cd prepost
 python raw2res.py --root dataset --reference refence_ensemble_member
 ```
 
-## Cutting Policy Generation
+### Cutting Policy Generation
 
 After a few simulations are run，generate the graph hierarchy cutting policy (Figure 2(b). 
 
@@ -47,7 +48,7 @@ Next, given the cutting policy, use adaptive resolutions to represent each ensem
 python res2ght.py --root dataset --ght ght_dir
 ```
 
-## Model Training 
+### Model Training 
 
 A deep surrogate model (i.e., GNN-Surrogate) is trained based on the generated training dataset: (Figure 2(d))
 ```
@@ -55,7 +56,7 @@ cd model
 python main.py --root dataset --gan-loss none --sn --ch channel_multiplier 
 ```
 
-## Inference 
+### Inference 
 
 In the inference stage, GNN-Surrogate is first used to predict the simulation residual:
 ```
@@ -82,3 +83,17 @@ Having the new MPAS netcdf file, consider using the following repo for visualiza
 [MPASCross](https://github.com/trainsn/MPASCross) for vertical cross-sections, 
 and [MPASDepth](https://github.com/trainsn/MPASDepth) for Isothermal Layer (ITL) Depth. 
 
+## Citation
+
+If you use this code for your research, please cite our paper.
+```
+@article{shi2022gnn,
+  title={GNN-Surrogate: A Hierarchical and Adaptive Graph Neural Network for Parameter Space Exploration of Unstructured-Mesh Ocean Simulations},
+  author={Shi, Neng and Xu, Jiayi and Wurster, Skylar W and Guo, Hanqi and Woodring, Jonathan and Van Roekel, Luke P and Shen, Han-Wei},
+  journal={arXiv preprint arXiv:2202.08956},
+  year={2022}
+}
+```
+
+## Acknowledgments
+Our code is inspired by [InSituNet](https://github.com/hewenbin/insitu_net)
