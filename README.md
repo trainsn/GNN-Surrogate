@@ -4,8 +4,9 @@ The source code for our PacificVis 2022 paper "GNN-Surrogate: A Hierarchical and
 ## Getting Started
 
 ### Graph Hierarchy Generation
+![](https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(a).jpg)
 
-Given the MPAS-Ocean mesh structure (a netcdf file), a corresponding graph hierarchy is generated (Figure 2(a)). 
+Given the MPAS-Ocean mesh structure (a netcdf file), a corresponding graph hierarchy is generated. 
 
 After compling MPASGraph, run 
 
@@ -17,6 +18,7 @@ cd mpas_graph/build
 ### Training Data Preperation 
 
 Given a MPAS-Ocean netcdf file, extract the tempearture field and represent it with a 1D array used for future training. 
+
 After compling MPASPerm, run 
 
 ```
@@ -31,8 +33,9 @@ python raw2res.py --root dataset --reference refence_ensemble_member
 ```
 
 ### Cutting Policy Generation
+![](https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(b).jpg)
 
-After a few simulations are run，generate the graph hierarchy cutting policy (Figure 2(b). 
+After a few simulations are run，generate the graph hierarchy cutting policy.
 
 After compling MPASGHT, run
 
@@ -42,21 +45,23 @@ cd mpas_ght/build
 python adjMat.py --root /path/to/ght_root/
 ```
 
-Next, given the cutting policy, use adaptive resolutions to represent each ensemble member:
+Next, given the cutting policy, use adaptive resolutions to represent each ensemble member.
 ```
 
 python res2ght.py --root dataset --ght ght_dir
 ```
 
 ### Model Training 
+![](https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(d).jpg)
 
-A deep surrogate model (i.e., GNN-Surrogate) is trained based on the generated training dataset: (Figure 2(d))
+A deep surrogate model (i.e., GNN-Surrogate) is trained based on the generated training dataset:
 ```
 cd model
 python main.py --root dataset --gan-loss none --sn --ch channel_multiplier 
 ```
 
 ### Inference 
+![](https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(e).jpg)
 
 In the inference stage, GNN-Surrogate is first used to predict the simulation residual:
 ```
