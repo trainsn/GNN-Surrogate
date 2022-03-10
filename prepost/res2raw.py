@@ -1,8 +1,9 @@
 import os
+import argparse
 import numpy as np
 import pdb
 
-parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+parser = argparse.ArgumentParser(description="res2raw")
 parser.add_argument("--root", type=str, required=True,
                     help="root of the dataset")
 parser.add_argument("--reference", type=str, default="0059_3.13326_1195.80632_0.59768_192.34201_temperature.npy",

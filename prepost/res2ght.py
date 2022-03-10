@@ -1,11 +1,12 @@
 import os
+import argparse
 import numpy as np
 import torch
 from torch_sparse import spmm
 
 import pdb
 
-parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+parser = argparse.ArgumentParser(description="res2ght")
 parser.add_argument("--root", type=str, default="/fs/project/PAS0027/mpas_graph",
                     help="root of the dataset")
 parser.add_argument("--ght", type=str, default="ght_0.5",
