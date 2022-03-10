@@ -4,7 +4,7 @@ The source code for our PacificVis 2022 paper "GNN-Surrogate: A Hierarchical and
 ## Getting Started
 
 ### Graph Hierarchy Generation
-![](https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(a).jpg)
+<img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(a).jpg" width="80%">
 
 Given the MPAS-Ocean mesh structure (a netcdf file), a corresponding graph hierarchy is generated. 
 
@@ -33,7 +33,7 @@ python raw2res.py --root dataset --reference refence_ensemble_member
 ```
 
 ### Cutting Policy Generation
-![](https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(b).jpg)
+<img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(b).jpg" width="80%">
 
 After a few simulations are run，generate the graph hierarchy cutting policy.
 
