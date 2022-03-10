@@ -52,7 +52,7 @@ python res2ght.py --root dataset --ght ght_dir
 ```
 
 ### Model Training 
-<img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(d).jpg" width="80%">
+<img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(d).jpg" width="60%">
 
 A deep surrogate model (i.e., GNN-Surrogate) is trained based on the generated training dataset:
 ```
@@ -61,7 +61,7 @@ python main.py --root dataset --gan-loss none --sn --ch channel_multiplier
 ```
 
 ### Inference 
-<img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(e).jpg" width="50%">
+<img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(e).jpg" width="20%">
 
 In the inference stage, GNN-Surrogate is first used to predict the simulation residual:
 ```
