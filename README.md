@@ -95,8 +95,9 @@ If you use this code for your research, please cite our paper.
 @article{shi2022gnn,
   title={GNN-Surrogate: A Hierarchical and Adaptive Graph Neural Network for Parameter Space Exploration of Unstructured-Mesh Ocean Simulations},
   author={Shi, Neng and Xu, Jiayi and Wurster, Skylar W and Guo, Hanqi and Woodring, Jonathan and Van Roekel, Luke P and Shen, Han-Wei},
-  journal={arXiv preprint arXiv:2202.08956},
-  year={2022}
+  journal={IEEE Transactions on Visualization and Computer Graphics},
+  year={2022},
+  publisher={IEEE}
 }
 ```
 
