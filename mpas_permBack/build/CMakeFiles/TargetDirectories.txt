@@ -1,0 +1,3 @@
+/users/PAS0027/trainsn/mpas/mpas_permBack/build/CMakeFiles/rebuild_cache.dir
+/users/PAS0027/trainsn/mpas/mpas_permBack/build/CMakeFiles/edit_cache.dir
+/users/PAS0027/trainsn/mpas/mpas_permBack/build/CMakeFiles/MPASPermBack.dir

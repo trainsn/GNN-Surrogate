@@ -21,10 +21,10 @@ int main(int argc, char **argv) {
 	string fileid = filename_s.substr(0, pos_first_dash);
 
 	char nc_path[1024];
-	sprintf(nc_path, "%s/%s", output_path, filename); //    /fs/project/PAS0027/MPAS1/Inter1/
+	sprintf(nc_path, "%s/%s", output_path, filename); //    /fs/ess/PAS0027/MPAS1/Inter1/
 
 	char bin_path[1024];
-	sprintf(bin_path, "%s/%s_temperature_fake.bin", input_path, fileid.c_str());   //  /fs/project/PAS0027/mpas_graph/test/
+	sprintf(bin_path, "%s/%s_temperature_fake.bin", input_path, fileid.c_str());   //  /fs/ess/PAS0027/mpas_graph/test/
 	
     loadMeshFromNetCDF(nc_path);
 
