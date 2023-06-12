@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++11
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/users/PAS0027/trainsn/mpas/mpas_permBack/src -I/users/PAS0027/trainsn/mpas/mpas_permBack/include -I/usr/local/netcdf/intel/17.0/mvapich2/2.3/4.6.1/include -I/opt/mvapich2/intel/17.0/2.3.2/include -I/users/PAS0027/trainsn/software/eigen3 
+CXX_INCLUDES = -I/users/PAS0027/trainsn/mpas/mpas_permBack/src -I/users/PAS0027/trainsn/mpas/mpas_permBack/include -I/usr/local/netcdf/intel/17.0/mvapich2/2.3/4.6.1/include 
 

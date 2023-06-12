@@ -29,24 +29,18 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 link_directories(/usr/local/netcdf/intel/17.0/mvapich2/2.3/4.6.1/lib)
 link_libraries(netcdf)
 
-# MPI 
-link_directories(/opt/mvapich2/intel/17.0/2.3.2/lib)
-link_libraries(mpi)
-
 # Define the include DIRs
 include_directories(
 	"${CMAKE_SOURCE_DIR}/src"
 	"${CMAKE_SOURCE_DIR}/include"
 	"/usr/local/netcdf/intel/17.0/mvapich2/2.3/4.6.1/include"
-	"/opt/mvapich2/intel/17.0/2.3.2/include"
-	"/users/PAS0027/trainsn/software/eigen3"
 )
 
 # Define the executable
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES})
 
 # Put all libraries into a variable
-set(LIBS netcdf mpi)
+set(LIBS netcdf)
 
 # Define the link libraries
 target_link_libraries(${PROJECT_NAME} ${LIBS})

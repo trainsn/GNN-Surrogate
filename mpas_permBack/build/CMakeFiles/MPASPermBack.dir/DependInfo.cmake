@@ -14,8 +14,6 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../src"
   "../include"
   "/usr/local/netcdf/intel/17.0/mvapich2/2.3/4.6.1/include"
-  "/opt/mvapich2/intel/17.0/2.3.2/include"
-  "/users/PAS0027/trainsn/software/eigen3"
   )
 
 # Targets to which this target links.
