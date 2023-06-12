@@ -63,7 +63,15 @@ python main.py --root dataset --gan-loss none --sn --ch channel_multiplier
 ### Inference 
 <img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(e).jpg" width="20%">
 
-In the inference stage, GNN-Surrogate is first used to predict the simulation residual:
+In the inference stage, GNN-Surrogate is first used to predict the simulation residual.
+
+You can first run the evaluation code to get the accucary on the testing dataset: 
+```
+cd model
+python eval.py --root dataset --sn --ch channel_multiplier --resume trained_model
+```
+
+Then, you can provide your own simulation parameters to let the model predict the residual to the reference enmsemble member: 
 ```
 cd model
 python infer.py --root dataset --gan-loss none --sn --ch channel_multiplier --resume trained_model --bwsa bwsa --kappa kappa --cvmix cvmix --mom mom
@@ -84,9 +92,22 @@ cd mpas_permBack/build
 ```
 
 Having the new MPAS netcdf file, consider using the following repo for visualizatoin: 
-[MPASMap](https://github.com/trainsn/MPASMap) for horizontal cross-sections, 
-[MPASCross](https://github.com/trainsn/MPASCross) for vertical cross-sections, 
-and [MPASDepth](https://github.com/trainsn/MPASDepth) for Isothermal Layer (ITL) Depth. 
+[MPASMap](https://github.com/trainsn/MPASMap/tree/main) for horizontal cross-sections, 
+[MPASCross](https://github.com/trainsn/MPASCross/tree/main) for vertical cross-sections, 
+and [MPASDepth](https://github.com/trainsn/MPASDepth/tree/main) for Isothermal Layer (ITL) Depth. 
+
+## Dataset and Saved Model
+
+You may find the dataset and saved model [here](https://drive.google.com/drive/folders/1R4nEgkBfjEtFWfm5DeNsENQjFKIMQqHw?usp=sharing).
+
+The folder "ght_0.5" contains the graph hierarchy and the training data after the GHT cutting with threshold 0.5, formatted with npy. 
+You can directly use the dataset to start model training. 
+
+The folder "residual" contains the residual data of full resolution, which can be used for model evaluation before loading the predicted output back to NetCDF.
+
+The folder "train" contains the reference member, you can add the residual data of full resolution to the reference member to obtain the simulation output. 
+
+The file "training_log-ch64.o8434915" is the training log with channel multiplier 64, and the file "model_1200.pth.tar" is the saved model after training for nearly 36 hours.
 
 ## Citation
 
@@ -95,8 +116,9 @@ If you use this code for your research, please cite our paper.
 @article{shi2022gnn,
   title={GNN-Surrogate: A Hierarchical and Adaptive Graph Neural Network for Parameter Space Exploration of Unstructured-Mesh Ocean Simulations},
   author={Shi, Neng and Xu, Jiayi and Wurster, Skylar W and Guo, Hanqi and Woodring, Jonathan and Van Roekel, Luke P and Shen, Han-Wei},
-  journal={arXiv preprint arXiv:2202.08956},
-  year={2022}
+  journal={IEEE Transactions on Visualization and Computer Graphics},
+  year={2022},
+  publisher={IEEE}
 }
 ```
 
