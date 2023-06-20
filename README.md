@@ -6,18 +6,18 @@ The source code for our PacificVis 2022 paper "GNN-Surrogate: A Hierarchical and
 ### Graph Hierarchy Generation
 <img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(a).jpg" width="80%">
 
-Given the MPAS-Ocean mesh structure (a netcdf file), a corresponding graph hierarchy is generated. 
+Given the MPAS-Ocean mesh structure (a NetCDF file), a corresponding graph hierarchy is generated. 
 
-After compling MPASGraph, run 
+After compiling MPASGraph, run 
 
 ```
 cd mpas_graph/build
 ./MPASGraph netcdf_filepath
 ```
 
-### Training Data Preperation 
+### Training Data Preparation 
 
-Given a MPAS-Ocean netcdf file, extract the tempearture field and represent it with a 1D array used for future training. 
+Given an MPAS-Ocean netcdf file, extract the temperature field and represent it with a 1D array for future training. 
 
 After compling MPASPerm, run 
 
@@ -35,9 +35,9 @@ python raw2res.py --root dataset --reference refence_ensemble_member
 ### Cutting Policy Generation
 <img src="https://github.com/trainsn/GNN-Surrogate/blob/main/images/overview(b).jpg" width="80%">
 
-After a few simulations are run，generate the graph hierarchy cutting policy.
+After a few simulations are run, generate the graph hierarchy cutting policy.
 
-After compling MPASGHT, run
+After compiling MPASGHT, run
 
 ```
 cd mpas_ght/build
@@ -65,13 +65,13 @@ python main.py --root dataset --gan-loss none --sn --ch channel_multiplier
 
 In the inference stage, GNN-Surrogate is first used to predict the simulation residual.
 
-You can first run the evaluation code to get the accucary on the testing dataset: 
+You can first run the evaluation code to get the accuracy on the testing dataset: 
 ```
 cd model
 python eval.py --root dataset --sn --ch channel_multiplier --resume trained_model
 ```
 
-Then, you can provide your own simulation parameters to let the model predict the residual to the reference enmsemble member: 
+Then, you can provide your own simulation parameters to let the model predict the residual to the reference ensemble member: 
 ```
 cd model
 python infer.py --root dataset --gan-loss none --sn --ch channel_multiplier --resume trained_model --bwsa bwsa --kappa kappa --cvmix cvmix --mom mom
@@ -91,7 +91,7 @@ cd mpas_permBack/build
 ./MPASPermBack /path/to/input_root/ /path/to/output_root/ netcdf_filename
 ```
 
-Having the new MPAS netcdf file, consider using the following repo for visualizatoin: 
+Having the new MPAS NetCDF file, consider using the following repo for visualizatoin: 
 [MPASMap](https://github.com/trainsn/MPASMap/tree/main) for horizontal cross-sections, 
 [MPASCross](https://github.com/trainsn/MPASCross/tree/main) for vertical cross-sections, 
 and [MPASDepth](https://github.com/trainsn/MPASDepth/tree/main) for Isothermal Layer (ITL) Depth. 
@@ -108,6 +108,8 @@ The folder "residual" contains the residual data of full resolution, which can b
 The folder "train" contains the reference member, you can add the residual data of full resolution to the reference member to obtain the simulation output. 
 
 The file "training_log-ch64.o8434915" is the training log with channel multiplier 64, and the file "model_1200.pth.tar" is the saved model after training for nearly 36 hours.
+
+The file "0070_4.88364_578.19012_0.51473_227.95909.nc" is an example MPAS NetCDF file. 
 
 ## Citation
 
