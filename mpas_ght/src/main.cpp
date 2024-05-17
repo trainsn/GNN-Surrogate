@@ -24,7 +24,6 @@ vector<string> filenames;
 // 	"0058_3.28657_370.41000_0.67670_284.41809_temperature.npy",
 // 	"0059_3.13326_1195.80632_0.59768_192.34201_temperature.npy",
 // 	"0060_1.99014_718.34192_0.36125_198.64491_temperature.npy"
-int numFiles = 1;
 char root[1024]; // /users/PAS0027/trainsn/mpas/mpas_graph/res/EC60to30/
 char ghtRoot[1024];    // ../res/EC60to30_0.5/
 vector<int> graphSizes, ghtGraphSizes;
@@ -231,18 +230,34 @@ void writeGhtAdjValue() {
 }
 
 int main(int argc, char **argv) {
+    if (argc < 6) {
+        std::cerr << "Usage: " << argv[0] << " <root> <threshold> <input_root> <ghtRoot> <numFiles> <file1> [<file2> ... <fileN>]" << std::endl;
+        return 1;
+    }
+    
     sprintf(root, argv[1]);
     threshold = atof(argv[2]);
     char input_root[1024];
 	sprintf(input_root, argv[3]);
     sprintf(ghtRoot, argv[4]);
-	numFiles = atoi(argv[5]);
+	int numFiles = atoi(argv[5]);
 	for (int i = 6; i < 6 + numFiles; i++){
 	    stringstream ss;
 		ss << argv[i] << ".npy";
 		string filename = ss.str();
 		filenames.push_back(filename);
 	}
+	
+	// Print out the values to verify
+    std::cout << "root: " << root << std::endl;
+    std::cout << "threshold: " << threshold << std::endl;
+    std::cout << "input_root: " << input_root << std::endl;
+    std::cout << "ghtRoot: " << ghtRoot << std::endl;
+    std::cout << "numFiles: " << numFiles << std::endl;
+    std::cout << "filenames: " << std::endl;
+    for (const auto& filename : filenames) {
+        std::cout << "  " << filename << std::endl;
+    }
 
 	readGraphSizes();
 	readAvgPool();
