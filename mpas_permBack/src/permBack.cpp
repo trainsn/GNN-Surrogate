@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 #include "def.h"
 #include "mesh.h"
 
@@ -18,13 +19,16 @@ int main(int argc, char **argv) {
 
 	string filename_s = filename;
 	int pos_first_dash = filename_s.find("_");
+	int pos_last_dot = filename_s.rfind(".");
 	string fileid = filename_s.substr(0, pos_first_dash);
 
 	char nc_path[1024];
-	sprintf(nc_path, "%s/%s", output_root, filename); //    /fs/ess/PAS0027/MPAS1/Inter1/
+	sprintf(nc_path, "%s/%s", output_root, filename); //    /fs/ess/PAS0027/MPAS1/INR/
 
 	char bin_path[1024];
-	sprintf(bin_path, "%s/%s_temperature_fake.bin", input_root, fileid.c_str());   //  /fs/ess/PAS0027/mpas_graph/test/
+	sprintf(bin_path, "%s/%s.bin", input_root, filename_s.substr(0, pos_last_dot).c_str());
+// 	sprintf(bin_path, "%s/%s_temperature_fake.bin", input_root, fileid.c_str());
+// 	sprintf(bin_path, "%s/64_256_16_32_16_v9_MSE_mpaso_%s_temperature.bin", input_root, filename_s.substr(0, pos_last_dot).c_str());   //  /fs/ess/PAS0027/mpas_inr/outputs/
 	
     loadMeshFromNetCDF(nc_path);
 
@@ -53,8 +57,9 @@ int main(int argc, char **argv) {
 	// read the data
 	readFileRes.read((char*)(&permedTemperature[0]), fileSizeRes);
 
+    float tMin = -1.93f, tMax = 30.35f - 1e-4f;
 	for (int i = 0; i < indices.size(); i++) {
-		fakeTemperature[indices[i]] = permedTemperature[i];
+		fakeTemperature[indices[i]] = (permedTemperature[i] < tMax) ? permedTemperature[i] : tMax;
 	}
 
 	double loss = 0.0;

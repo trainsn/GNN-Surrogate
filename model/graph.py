@@ -7,8 +7,8 @@ from torch_sparse import coalesce, spspmm
 import pdb
 
 def load_graph(path):
-    graphSizes = np.load(os.path.join(path, "ghtGraphSizes.npy"))
-    valid = [1, 3, 5, 6, 8, 10, 11, 12]
+    graphSizes = np.load(os.path.join(path, "graphSizes.npy"))
+    valid = [0, 2, 4, 5, 7, 9, 10, 11]
     edgeNum = 7
 
     adjValues = []
@@ -20,12 +20,12 @@ def load_graph(path):
     devices.insert(0, torch.device("cuda:0"))
     layer_id = 0
     for idx in valid:
-        adjIdx = np.load(os.path.join(path, "ghtAdjacencyIdx" + str(idx) + ".npy"))
-        adjValue0 = np.load(os.path.join(path, "ghtAdjacencyValue" + str(idx) + ".npy")).astype(np.float32)
+        adjIdx = np.load(os.path.join(path, "adjacencyIdx" + str(idx) + ".npy"))
+        adjValue0 = np.load(os.path.join(path, "adjacencyValue" + str(idx) + ".npy")).astype(np.float32)
         adjIdx = torch.from_numpy(adjIdx).to(devices[layer_id])
         adjValue0 = torch.from_numpy(adjValue0).to(devices[layer_id])
 
-        edgeInfo = np.load(os.path.join(path, "ghtEdgeInfo" + str(idx) + ".npy")).astype(np.float32)
+        edgeInfo = np.load(os.path.join(path, "edgeInfo" + str(idx) + ".npy")).astype(np.float32)
         edgeInfo = torch.from_numpy(edgeInfo).to(devices[layer_id])
         adjValue = []
         edgeOne = []
@@ -57,22 +57,39 @@ def load_graph(path):
 
     avgPoolAsgnIndices = []
     avgPoolAsgnValues = []
-    upAsgnIndices = []
-    upAsgnValues = []
-
     for i in range(len(valid) - 1):
         idx = valid[i]
-        avgPoolAsgnIdx = torch.from_numpy(np.load(os.path.join(path, "ghtAvgPoolAsgnIdx" + str(idx) + ".npy"))).type(torch.LongTensor).to(devices[layer_id])
-        avgPoolAsgnValue = torch.from_numpy(np.load(os.path.join(path, "ghtAvgPoolAsgnValue" + str(idx) + ".npy")).astype(np.float32)).to(devices[layer_id])
-        avgPoolAsgnValue = avgPoolAsgnValue.type(torch.float16)
+        if valid[i+1] - valid[i] == 2:
+            avgPoolAsgnIdxA = torch.from_numpy(np.load(os.path.join(path, "avgPoolAsgnIdx" + str(idx) + ".npy"))).type(torch.LongTensor).to('cuda:0')
+            avgPoolAsgnValueA = torch.from_numpy(np.load(os.path.join(path, "avgPoolAsgnValue" + str(idx) + ".npy")).astype(np.float32)).to('cuda:0')
+            avgPoolAsgnIdxB = torch.from_numpy(np.load(os.path.join(path, "avgPoolAsgnIdx" + str(idx+1) + ".npy"))).type(torch.LongTensor).to('cuda:0')
+            avgPoolAsgnValueB = torch.from_numpy(np.load(os.path.join(path, "avgPoolAsgnValue" + str(idx+1) + ".npy")).astype(np.float32)).to('cuda:0')
+            avgPoolAsgnIdx, avgPoolAsgnValue = spspmm(avgPoolAsgnIdxB, avgPoolAsgnValueB, avgPoolAsgnIdxA, avgPoolAsgnValueA,
+                                                      graphSizes[idx+2], graphSizes[idx+1], graphSizes[idx])
+            avgPoolAsgnIdx = avgPoolAsgnIdx.to('cpu')
+            avgPoolAsgnValue = avgPoolAsgnValue.to('cpu').type(torch.float16)
+        else:
+            avgPoolAsgnIdx = torch.from_numpy(np.load(os.path.join(path, "avgPoolAsgnIdx" + str(idx) + ".npy"))).type(torch.LongTensor)
+            avgPoolAsgnValue = torch.from_numpy(np.load(os.path.join(path, "avgPoolAsgnValue" + str(idx) + ".npy")).astype(np.float16))
         avgPoolAsgnIndices.append(avgPoolAsgnIdx)
         avgPoolAsgnValues.append(avgPoolAsgnValue)
 
+    upAsgnIndices = []
+    upAsgnValues = []
     for i in range(1, len(valid)):
         idx = valid[i]
-        upAsgnIdx = torch.from_numpy(np.load(os.path.join(path, "ghtUpAsgnIdx" + str(idx) + ".npy"))).type(torch.LongTensor).to(devices[layer_id])
-        upAsgnValue = torch.from_numpy(np.load(os.path.join(path, "ghtUpAsgnValue" + str(idx) + ".npy")).astype(np.float32)).to(devices[layer_id])
-        upAsgnValue = upAsgnValue.type(torch.float16)
+        if valid[i] - valid[i-1] == 2:
+            upAsgnIdxA = torch.from_numpy(np.load(os.path.join(path, "upAsgnIdx" + str(idx) + ".npy"))).type(torch.LongTensor).to('cuda:0')
+            upAsgnValueA = torch.from_numpy(np.load(os.path.join(path, "upAsgnValue" + str(idx) + ".npy")).astype(np.float32)).to('cuda:0')
+            upAsgnIdxB = torch.from_numpy(np.load(os.path.join(path, "upAsgnIdx" + str(idx-1) + ".npy"))).type(torch.LongTensor).to('cuda:0')
+            upAsgnValueB = torch.from_numpy(np.load(os.path.join(path, "upAsgnValue" + str(idx-1) + ".npy")).astype(np.float32)).to('cuda:0')
+            upAsgnIdx, upAsgnValue = spspmm(upAsgnIdxB, upAsgnValueB, upAsgnIdxA, upAsgnValueA,
+                                            graphSizes[idx-2], graphSizes[idx-1], graphSizes[idx])
+            upAsgnIdx = upAsgnIdx.to('cpu')
+            upAsgnValue = upAsgnValue.to('cpu').type(torch.float16)
+        else:
+            upAsgnIdx = torch.from_numpy(np.load(os.path.join(path, "upAsgnIdx" + str(idx) + ".npy"))).type(torch.LongTensor)
+            upAsgnValue = torch.from_numpy(np.load(os.path.join(path, "upAsgnValue" + str(idx) + ".npy")).astype(np.float16))
         upAsgnIndices.append(upAsgnIdx)
         upAsgnValues.append(upAsgnValue)
 

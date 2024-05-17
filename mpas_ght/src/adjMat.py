@@ -16,7 +16,7 @@ def normalize(mx):
     mx = r_mat_inv.dot(mx)
     return mx
 
-parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("--root", type=str, required=True,
                     help="root of the graph hierarchy")
 

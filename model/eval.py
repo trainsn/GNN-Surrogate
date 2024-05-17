@@ -96,9 +96,9 @@ def main(args):
 
     graphSizes, adjValues, edgeOnes, E_starts, E_ends, \
     avgPoolAsgnIndices, avgPoolAsgnValues, upAsgnIndices, upAsgnValues = \
-    load_graph(os.path.join(args.root, "graphM"))
-    upAsgnIdx = torch.from_numpy(np.load(os.path.join(args.root, "graphM", "ghtUpAsgnIdx1.npy"))).type(torch.LongTensor).to('cuda:0')
-    upAsgnValue = torch.from_numpy(np.load(os.path.join(args.root, "graphM",  "ghtUpAsgnValue1.npy")).astype(np.float32)).to('cuda:0')
+    load_graph(os.path.join(args.root, "graph"))
+    upAsgnIdx = torch.from_numpy(np.load(os.path.join(args.root, "graph", "upAsgnIdx1.npy"))).type(torch.LongTensor).to('cuda:0')
+    upAsgnValue = torch.from_numpy(np.load(os.path.join(args.root, "graph",  "upAsgnValue1.npy")).astype(np.float32)).to('cuda:0')
 
     g_model = Generator(graphSizes, adjValues, edgeOnes, E_starts, E_ends,
                         upAsgnIndices, upAsgnValues,
@@ -161,20 +161,27 @@ def main(args):
     #                  sample["params"][2].item() * .375 + .625, sample["params"][3].item() * 100.0 + 200.0
     #     )))
 
-    equator = np.load(os.path.join(args.root, "../equator_patch.npy"))
+    dmin = -1.93
+    dmax = 30.36
+
+    equator = np.load(os.path.join(args.root, "equator_patch.npy"))
     mse = 0.
     psnrs = np.zeros(len(test_loader.dataset))
     max_diff = np.zeros(len(test_loader.dataset))
     with torch.no_grad():
-        for i, sample in tqdm(enumerate(test_loader)):
+        for i, sample in enumerate(test_loader):
             data = sample["data"]
             sparams = sample["params"]
-            data = data.view(upAsgnIdx[0].max() + 1).cpu().numpy().astype(np.double) * 12.12 - 0.44
+            data = data.view(upAsgnIdx[0].max() + 1).cpu().numpy().astype(np.double) * ((dmax - dmin) / 2.) + (dmin + dmax) / 2.
             # data = data.view(upAsgnIdx[1].max() + 1).cpu().numpy().astype(np.double) * 12.12 - 0.44
             fake_data = g_model(sparams)
-            fake_data = batch_spmm(upAsgnIdx, upAsgnValue, upAsgnValue.shape[0], graphSizes[0], fake_data)
-            fake_data = fake_data.view(upAsgnIdx[0].max() + 1).cpu().numpy().astype(np.double) * 12.12 - 0.44
+            # fake_data = batch_spmm(upAsgnIdx, upAsgnValue, upAsgnValue.shape[0], graphSizes[0], fake_data)
+            fake_data = fake_data.view(upAsgnIdx[0].max() + 1).cpu().numpy().astype(np.double) * ((dmax - dmin) / 2.) + (dmin + dmax) / 2.
             # fake_data = fake_data.view(upAsgnIdx[1].max() + 1).cpu().numpy().astype(np.double) * 12.12 - 0.44
+            torch.cuda.empty_cache()
+
+             # Print the max value of the prediction
+            print("Max value of prediction for batch {}: {}".format(i, fake_data.max()))
 
             if args.equator:
                 data = data * equator
@@ -187,13 +194,13 @@ def main(args):
             if args.equator:
                 psnrs[i] = 20. * np.log10(29.50 - 11.00) - 10. * np.log10(np.power(data - fake_data, 2.).mean())
             else:
-                psnrs[i] = 20. * np.log10(1.93 + 30.35) - 10. * np.log10(np.power(data - fake_data, 2.).mean())
+                psnrs[i] = 20. * np.log10(1.93 + 30.36) - 10. * np.log10(np.power(data - fake_data, 2.).mean())
 
             if args.equator:
                 print("{:d} PSNR: {:4f}".format(i, 20. * np.log10(29.50 - 11.00) -
                                                 10. * np.log10(np.power(data - fake_data, 2.).mean())))
             else:
-                print("{:d} PSNR: {:4f}".format(i, 20. * np.log10(1.93 + 30.35) -
+                print("{:d} PSNR: {:4f}".format(i, 20. * np.log10(1.93 + 30.36) -
                                                 10. * np.log10(np.power(data - fake_data, 2.).mean())))
 
             if args.save:
@@ -215,10 +222,10 @@ def main(args):
         #       .format(20. * np.log10(12.12 * 2) -
         #               10. * np.log10(mse / len(test_loader.dataset))))
         print("====> PSNR on raw avg {}, std var {}"
-              .format(20. * np.log10(1.93 + 30.35) -
+              .format(20. * np.log10(1.93 + 30.36) -
                       10. * np.log10(mse / len(test_loader.dataset)),  psnrs.std()))
         print("====> max difference on raw avg {}, std var {}"
-              .format(max_diff.mean() / (1.93 + 30.35), max_diff.std() / (1.93 + 30.35)))
+              .format(max_diff.mean() / (1.93 + 30.36), max_diff.std() / (1.93 + 30.36)))
 
 
 if __name__ == "__main__":

@@ -128,7 +128,7 @@ def main(args):
 
     graphSizes, adjValues, edgeOnes, E_starts, E_ends, \
     avgPoolAsgnIndices, avgPoolAsgnValues, upAsgnIndices, upAsgnValues = \
-    load_graph(os.path.join(args.root, "graphM"))
+    load_graph(os.path.join(args.root, "graph"))
 
     g_model = Generator(graphSizes, adjValues, edgeOnes, E_starts, E_ends,
                         upAsgnIndices, upAsgnValues, args.dsp, args.dspe, args.ch)

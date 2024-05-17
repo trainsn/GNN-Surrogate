@@ -13,11 +13,11 @@ class MPASDataset(Dataset):
     def __init__(self, root, train=True, num_run=0, data_len=0, transform=None):
         if train:
             if num_run > 0:
-                fh = open(os.path.join(root, "train", "npyNames_" + str(num_run) + ".txt"))
+                fh = open(os.path.join(root, "train", "names_" + str(num_run) + ".txt"))
             else:
-                fh = open(os.path.join(root, "train", "npyNames.txt"))
+                fh = open(os.path.join(root, "train", "names.txt"))
         else:
-            fh = open(os.path.join(root, "../residual/test", "npyNames.txt"))
+            fh = open(os.path.join(root, "test", "names.txt"))
         filenames = []
         for line in fh:
             filenames.append(line)
@@ -34,7 +34,7 @@ class MPASDataset(Dataset):
             else:
                 self.params = np.load(os.path.join(root, "train/params.npy"))
         else:
-            self.params = np.load(os.path.join(root, "../residual/test/params.npy"))
+            self.params = np.load(os.path.join(root, "test/params.npy"))
 
     def __len__(self):
         if self.data_len:
@@ -51,7 +51,7 @@ class MPASDataset(Dataset):
         if self.train:
             data_name = os.path.join(self.root, "train", filename)
         else:
-            data_name = os.path.join(self.root, "../residual/test", filename)
+            data_name = os.path.join(self.root, "test", filename)
         data = np.load(data_name)
 
         params = self.params[index, 1:]
@@ -67,9 +67,9 @@ class Normalize(object):
         data = sample["data"]
         params = sample["params"]
 
-        # data min -12.557852
-        #      max 11.666099
-        data = (data.astype(np.float32) + 0.44) / 12.12
+        dmin = -1.93
+        dmax = 30.36
+        data = (data.astype(np.float32) - (dmin + dmax) / 2.) / ((dmax - dmin) / 2.)
 
         # params min [0.0, 300.0, 0.25, 100.0]
         #        max [5.0, 1500.0, 1.0, 300.0]
