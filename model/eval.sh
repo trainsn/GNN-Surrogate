@@ -1,0 +1,1 @@
+python eval.py --root /fs/ess/PAS0027/mpas_graph --ch 96 --resume /fs/ess/PAS0027/mpas_graph/model_144.pth.tar --sn 
